@@ -143,14 +143,16 @@
         }
     }
 
+    let intervalId
+
     function initChat() {
         // HTTP
         // Request --> Response
         // Polling
         // Websocket
         // Message <--> Message
-        getMessages();
-        setInterval(
+        getMessages(scrollToBottom);
+        intervalId = setInterval(
             getMessages,
             3000,
             scrollToBottom
@@ -202,4 +204,17 @@
     }
 
     initApp();
+    const button = document.getElementById('myButton');
+    // Добавляем обработчик клика
+    button.addEventListener(
+        'click',
+        function () {
+            localStorage.removeItem(USERNAME_REC);
+            chatContainer.innerHTML = "";
+            clearInterval(intervalId);
+            message_size -= message_size;
+            initApp();
+            // alert('Кнопка нажата!');
+        }
+    );
 }
