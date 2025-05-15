@@ -54,17 +54,23 @@
 //         document.removeEventListener('mousedown', hideMenu1);
 //     }
 // }
-
 // btn1.addEventListener('click', showMenu1, false);
-
 const USERNAME_REC = "username";
 let username = null;
 const chatContainer = document.querySelector(".messages");
 const usernameContainer = document.querySelector(".username");
+let element = document.querySelector(".date");
 let message_size = 0;
+let sd = '44';
+let count = 0;
+
 function renderMessages(messages) {
     chatContainer.innerHTML = "";
     for (const message of messages) {
+
+        let dateElement = document.createElement("date");
+        dateElement.className = "dateAdd";
+
         const messageElement = document.createElement("article");
         messageElement.className = "message";
         messageElement.classList.toggle(
@@ -79,10 +85,26 @@ function renderMessages(messages) {
         <p class="message-text"><code>${message.text}</code></p>
         <time class="message-time">${message.timestamp}</time>
       `;
+        let chatDate = message.timestamp.toLocaleString()
+            .split(
+                'T',
+                1
+            )[0];
+        if (count == 0) {
+            dateElement.innerHTML = `<div class="nn">${chatDate}</div>`;
+            chatContainer.append(dateElement);
+            console.log(chatDate);
+            count++;
+        }
+        if (sd != chatDate) {
+            dateElement.innerHTML = `<div class="nn">${chatDate}</div>`;
+            chatContainer.append(dateElement);
+            console.log(chatDate);
+        }
+        sd = chatDate;
         chatContainer.appendChild(messageElement);
     }
 }
-
 
 function getMessages(cb) {
     fetch(
@@ -98,6 +120,7 @@ function getMessages(cb) {
             return messagesResponse.json();
         })
         .then(function (messagesList) {
+            count =0;
             renderMessages(messagesList);
             if (typeof cb === "function") {
                 if (messagesList.length != message_size) {
@@ -115,6 +138,7 @@ function scrollToBottom() {
 }
 
 getMessages(scrollToBottom);
+
 function initForm() {
     const formContainer = document.querySelector("#message-form");
     const formTextField = formContainer.querySelector("textarea");
@@ -130,7 +154,7 @@ function initForm() {
         };
         formTextField.disabled = true;
         formSubmitButton.disabled = true;
-        formSubmitButton.textContent = "Сообщение отправляется...";
+        // formTextField.value = "Сообщение отправляется...";
         fetch(
             "http://localhost:4000/messages",
             {
@@ -149,7 +173,10 @@ function initForm() {
                     clearInterval(intervalId);
                     message_size -= message_size;
                     initApp();
-                    console.log("error", newMessageResponse.error);
+                    console.log(
+                        "error",
+                        newMessageResponse.error
+                    );
                 }
                 formTextField.disabled = false;
                 formTextField.value = "";
@@ -159,7 +186,9 @@ function initForm() {
             });
     }
 }
+
 let intervalId;
+
 function initChat() {
     // HTTP
     // Request --> Response
@@ -198,6 +227,7 @@ function initUsernameForm() {
     };
     usernameContainer.showModal();
 }
+
 // Модальное приложение
 // Модальность — зависимость от состояния
 // В нашем случае режим переключается наличием username
@@ -208,13 +238,11 @@ function initApp() {
     if (username === null) {
         window.location.href = 'entrance.html';
         // initUsernameForm();
-
     }
     initChat();
 }
 
 initApp();
-
 const button = document.getElementById('myButton');
 // Добавляем обработчик клика
 button.addEventListener(
