@@ -12,30 +12,41 @@
 		<div class='logo'>
 			<img src="./img/logo.png" style='width: 46px' alt="Описание изображения" loading="lazy">
 		</div>
-		<p>Online Chat</p>
+		<p class='title'>Online Chat</p>
+		<button id= 'myButton' >Выйти</button>
 	</div>
-	<div class="container">
-		<div class="more">
-			<button id="more-btn" class="more-btn">
-				<span class="more-dot"></span> <span class="more-dot"></span> <span class="more-dot"></span>
-			</button>
-			<div class="more-menu">
-				<div class="more-menu-caret">
-					<div class="more-menu-caret-outer"></div>
-					<div class="more-menu-caret-inner"></div>
-				</div>
-				<ul class="more-menu-items" tabindex="-1" role="menu" aria-labelledby="more-btn" aria-hidden="true">
-					<li class="more-menu-item" role="presentation">
-						<button type="button" class="more-menu-btn" role="menuitem">Edit name</button>
-					</li>
-					<li class="more-menu-item" role="presentation">
-						<button type="button" class="more-menu-btn" role="menuitem">Logout</button>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</div>
+<!--	<div class="container">-->
+<!--		<div class="more">-->
+<!--			<button id="more-btn" class="more-btn">-->
+<!--				<span class="more-dot"></span> <span class="more-dot"></span> <span class="more-dot"></span>-->
+<!--			</button>-->
+<!--			<div class="more-menu">-->
+<!--				<div class="more-menu-caret">-->
+<!--					<div class="more-menu-caret-outer"></div>-->
+<!--					<div class="more-menu-caret-inner"></div>-->
+<!--				</div>-->
+<!--				<ul class="more-menu-items" tabindex="-1" role="menu" aria-labelledby="more-btn" aria-hidden="true">-->
+<!--					<li class="more-menu-item" role="presentation">-->
+<!--						<button type="button" class="more-menu-btn" role="menuitem">Edit name</button>-->
+<!--					</li>-->
+<!--					<li class="more-menu-item" role="presentation">-->
+<!--						<button type="button" class="more-menu-btn"  id='logout' role="menuitem">Logout</button>-->
+<!--					</li>-->
+<!--				</ul>-->
+<!--			</div>-->
+<!--		</div>-->
+<!--	</div>-->
 </div>
+
+<dialog class="username">
+	<form method="POST">
+		<fieldset>
+			<label>Username</label>
+			<input required type="text" name="username" placeholder="username" autocapitalize="off" autocomplete="off"  />
+		</fieldset>
+		<button type="submit">Join</button>
+	</form>
+</dialog>
 <div class='main-content'>
 	<div class='date'>1 Feb 2025</div>
 	<div class='messages'>
@@ -103,15 +114,18 @@
 		</div>
 	</div>
 
-
+	<section class="form" id="message-form">
 	<form id='formName' name='formName' onsubmit='redirect();return false;'>
 		<div class='sending_message'>
-			<textarea id="w3review" name="w3review" rows="4" cols="50"></textarea>
+			<textarea id="w3review" name="text" rows="4" cols="50"></textarea>
 			<input id='submit_button'  type="image" name="submit" src='img/arrow.png' border="0" alt="Submit"
 				   style="width: 50px;
 			height:60px" />
+			<input type="hidden" name="username" value="guest001" />
+
 		</div>
 	</form>
+	</section>
 
 
 </div>

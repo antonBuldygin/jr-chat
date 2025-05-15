@@ -3,7 +3,7 @@ body {display: flex;
 	box-sizing: border-box;
 	align-items: stretch;
 	align-content: space-between;
-	
+	/* font: 16px sans-serif; */
 	}
 
 .header {
@@ -23,12 +23,12 @@ body {display: flex;
 	gap: 38px;
 	}
 
-p {
+.title{
 	font-family: "Arial", "Verdana", sans-serif;
 	font-weight: 700;
 	font-size: 36px;
-	/* line-height: 100%; */
-	/* letter-spacing: 0; */
+	line-height: 100%;
+	letter-spacing: 0;
 	text-align: center;
 	color: #FFFFFF;
 	margin: 0;
@@ -48,12 +48,73 @@ p {
 	align-items: center;
 	padding-top: 20px}
 
-.messages {display: flex;
-	flex-direction: column;
-	width: 70%;
-	justify-content: space-around;
-	row-gap: 26px;}
+/* .messages {display: flex; */
+/* 	flex-direction: column; */
+/* 	width: 10%; */
+/* 	justify-content: space-around; */
+/* 	row-gap: 26px;} */
 
+.messages {
+	height: 80vh;
+	margin: 0 auto;
+	overflow: auto;
+	width: 90%;
+	}
+
+.message {
+	margin-bottom: 20px;
+	width: 30%;
+	}
+
+.message-mine {
+	margin-left: auto;
+	width: 70%;
+	}
+
+.message-header {
+	display: flex;
+	justify-content: space-between;
+	}
+
+.message-text {
+	background: #fff;
+	border: solid 1px #000;
+	border-radius: 10px;
+	margin: 0;
+	padding: 1em;
+	color: #160211;
+	font-weight: 400;
+	
+	word-break: break-all;
+	font-family: "Arial", "Verdana", sans-serif;
+	font-weight: 400;
+	font-size: 15px;
+	}
+
+.message-time {
+	color: #999;
+	font-size: 80%;
+	}
+
+.message-author {
+	font-size: 20px;
+	font-weight: bold;
+	text-transform: uppercase;
+	}
+.form , #message-form{
+	display: flex;
+	flex-direction: row;
+	/* align-items: center; */
+	align-content: center;
+	justify-content: space-evenly;
+	/* width: 66%; */
+	background-color: white;
+	border-radius: 8px;
+	padding: 3px;
+	height: 58px;
+	border-width: 1px;
+	border: 2px solid black;
+	}
 .frame-from {
 	
 	/* align-content: center; */
@@ -92,6 +153,7 @@ p {
 	box-sizing: border-box;
 	font-family: "Arial", "Verdana", sans-serif;
 	font-weight: 400;
+	font-size: 12px;
 	
 	}
 
@@ -151,28 +213,31 @@ textarea {
 /* 	} */
 
 /* Page */
-#formName {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	width: 70%;
-	background-color: white;
-	border-radius: 8px;
-	
-	border: none;
-	}
+/* #formName { */
+/* 	display: flex; */
+/* 	flex-direction: row; */
+/* 	align-items: center; */
+/* 	width: 70%; */
+/* 	background-color: white; */
+/* 	border-radius: 8px; */
+/* 	 */
+/* 	border: none; */
+/* 	} */
 
 .sending_message {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	width: 100%;
+	width: 1200px;
 	background-color: white;
 	border-radius: 8px;
-	padding: 3px;
+	margin: 0;
+	justify-self: center;
+	
+	/* padding: 3px; */
 	height: 58px;
-	border-width: 1px;
-	border: 2px solid black;
+	/* border-width: 1px; */
+	/* border: 2px solid black; */
 	}
 
 .container {
@@ -204,7 +269,19 @@ textarea {
 	outline: none;
 	cursor: pointer;
 	}
-
+.more-btn,.more-menu-btn1 {
+	background: none;
+	border: 0 none;
+	line-height: normal;
+	overflow: visible;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	width: 100%;
+	text-align: left;
+	outline: none;
+	cursor: pointer;
+	}
 .more-dot {
 	background-color: #aab8c2;
 	margin: 0 auto;
@@ -291,7 +368,17 @@ textarea {
 	position: relative;
 	white-space: nowrap;
 	}
-
+#logout{
+	min-width: 100%;
+	color: #66757f;
+	cursor: pointer;
+	display: block;
+	font-size: 13px;
+	line-height: 18px;
+	padding: 5px 20px;
+	position: relative;
+	white-space: nowrap;
+	}
 .more-menu-item:hover {
 	background-color: #489fe5;
 	}
@@ -309,4 +396,10 @@ textarea {
 	opacity: 1;
 	transform: translate(0, 0) scale(1);
 	pointer-events: auto;
+	}
+
+#myButton {
+	width: 100px;
+	height: 30px;
+	margin-left: 350px;
 	}
