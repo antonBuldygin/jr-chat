@@ -55,6 +55,8 @@
 //     }
 // }
 // btn1.addEventListener('click', showMenu1, false);
+
+import moment from '../node_modules/moment';
 const USERNAME_REC = "username";
 let username = null;
 const chatContainer = document.querySelector(".messages");
@@ -83,13 +85,14 @@ function renderMessages(messages) {
           <button class="message-control"></button>
         </div>
         <p class="message-text"><code>${message.text}</code></p>
-        <time class="message-time">${message.timestamp}</time>
+        <time class="message-time">${moment(message.timestamp).format('LT')}</time>
       `;
-        let chatDate = message.timestamp.toLocaleString()
-            .split(
-                'T',
-                1
-            )[0];
+        let chatDate = moment(message.date).format("LL");
+            //     message.timestamp.toLocaleString()
+            // .split(
+            //     'T',
+            //     1
+            // )[0];
         if (count == 0) {
             dateElement.innerHTML = `<div class="nn">${chatDate}</div>`;
             chatContainer.append(dateElement);
