@@ -44,19 +44,43 @@ server.post("/messages", function(req: Request, res: Response) {
 
   // *Некрасивенько, что в одном if проводятся сразу все проверки username
   // потому что сложно сформировать адекватное сообщение об ошибке
-  if (typeof username !== "string" || username.length < 2 || username.length > 50) {
+  if (typeof username !== "string" ) {
     res.status(400).send({
-      message: "Incorrect username",
+      message: "Incorrect username . Not a string",
     });
-
+    return;
+  }
+  if ( username.length < 2 ) {
+    res.status(400).send({
+      message: "Incorrect username. username.length < 2",
+    });
     return;
   }
 
-  if (typeof text !== "string" || text.length < 1 || text.length > 500) {
+  if (username.length > 50) {
     res.status(400).send({
-      message: "Incorrect message text",
+      message: "Incorrect username. username.length > 50",
     });
+    return;
+  }
 
+  if (typeof text !== "string" ) {
+    res.status(400).send({
+      message: "Incorrect message text. Not a string",
+    });
+    return;
+  }
+
+  if ( text.length < 1 ) {
+    res.status(400).send({
+      message: "Incorrect message text.text.length < 1",
+    });
+    return;
+  }
+  if (text.length > 500) {
+    res.status(400).send({
+      message: "Incorrect message text.text.length > 500",
+    });
     return;
   }
 
