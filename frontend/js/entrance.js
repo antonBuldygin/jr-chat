@@ -13,7 +13,7 @@ function initUsernameForm() {
         );
 
 
-        window.location.href = 'chat_2.html';
+        window.location.href = 'index.html';
 
         usernameContainer.close();
         usernameForm.onsubmit = null;
