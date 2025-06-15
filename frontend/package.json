@@ -1,0 +1,19 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "js/chat.js",
+  "scripts": {
+    "build": "parcel build js/chat.js --out-dir dist"
+  },
+  "devDependencies": {
+    "browserify": "^17.0.1",
+    "parcel-bundler": "^1.12.5"
+  },
+  "dependencies": {
+    "moment": "^2.30.1"
+  }
+}
