@@ -64,7 +64,7 @@
 
       messageElement.innerHTML = `
         <div class="message-header">
-          <div class="message-author">${message.username}</div>
+          <div class="message-author">${message.username ?? `<span class="message-author-deleted">✖️ Пользователь удален</span>`}</div>
           <button class="message-control"></button>
         </div>
         <p class="message-text">${message.text}</p>
@@ -114,7 +114,7 @@
       const formData = new FormData(evt.target);
 
       const messageData = {
-        username: formData.get("username"),
+        user_id: formData.get("username"),
         text: formData.get("text"),
       };
 
@@ -181,12 +181,30 @@
       const formData = new FormData(formElement);
       const enteredUsername = formData.get("username");
 
-      localStorage.setItem(USERNAME_REC, enteredUsername);
+      fetch("http://localhost:4000/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          "username": enteredUsername,
+        }),
+      })
+        .then(function(authResponse) {
+          if (authResponse.status !== 200) {
+            //
+          }
 
-      usernameContainer.close();
-      usernameForm.onsubmit = null;
+          return authResponse.json();
+        })
+        .then(function(authResponseData) {
+          localStorage.setItem(USERNAME_REC, authResponseData.user_id);
 
-      initApp();
+          usernameContainer.close();
+          usernameForm.onsubmit = null;
+
+          initApp();
+        });
     };
 
     usernameContainer.showModal();

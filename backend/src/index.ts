@@ -4,72 +4,117 @@ import { Client } from "pg";
 
 const PORT = process.env.APP_PORT || 4000;
 
+type User = {
+  "user_id": number,
+  "username": string,
+};
+
 type Message = {
   "id": number,
-  "username": string,
+  "username": string | null,
   "text": string,
   "timestamp": string,
 };
 
-const client = new Client();
+const pgClient = new Client();
 
 const server = express();
-
-const messages: Message[] = [];
-// CREATE TABLE messages (
-//  id SERIAL,
-// );
-
-// ------------------------------------------------|--------------
-//             DB        Tables      Columns       |     Rows
-// ------------------------------------------------|--------------
-// Create          CREATE/ALTER                    |    INSERT
-// Update          ALTER                           |    UDPATE
-// Delete          DROP/ALTER                      |    DELETE
-// ------------------------------------------------|--------------
-// Read                          SELECT
-// ------------------------------------------------|--------------
-
-
-function* infiniteSequence() {
-  let i = 0;
-  while (true) {
-    yield ++i;
-  }
-}
 
 async function initServer() {
   if (!process.env.PGUSER) {
     throw new Error("Server cannot be started without database credentials provided in .env file");
   }
 
-  const idIterator = infiniteSequence();
-
   server.use(cors());
 
   server.use(express.json());
+
+  async function getUsers() {
+    const usersResponse = await pgClient.query("SELECT * FROM users");
+    return usersResponse.rows as User[];
+  }
+
+  async function getUserById(userId: number) {
+    const usersResponse = await pgClient.query(`SELECT * FROM users WHERE user_id = $1::integer`, [userId]);
+
+    if (usersResponse.rows.length > 0) {
+      return usersResponse.rows[0] as User;
+    }
+
+    return null;
+  }
+
+  async function getUserByName(username: string) {
+    const usersResponse = await pgClient.query(`SELECT * FROM users WHERE username = $1::text`, [username]);
+
+    if (usersResponse.rows.length > 0) {
+      return usersResponse.rows[0] as User;
+    }
+
+    return null;
+  }
 
   server.get("/", function (req: Request, res: Response) {
     res.status(200).json("Hello from backend");
   });
 
-  server.get("/messages", function (req: Request, res: Response) {
-    res.status(200).json([...messages].filter((m) =>
-      Date.now() - +new Date(m.timestamp) < 1000 * 60 * 60 * 24 * 3
-    ));
+  server.get("/users", async function (req: Request, res: Response) {
+    const usersResponse = await getUsers();
+    res.status(200).send(usersResponse);
   });
 
-  server.post("/messages", function (req: Request, res: Response) {
-    const { username, text } = req.body;
+  server.post("/users", async function (req: Request, res: Response) {
+    const { username } = req.body;
+    const user = await getUserByName(username);
 
-    // 2 Стратегии валидации
-    //   1. Проверяются все ошибки и отправляются скопом
-    //   2. Проверка останавливается на первой попавшейся ошибке и отправляется эта ошибка
+    if (user !== null) {
+      res.status(200).send({
+        "user_id": user.user_id,
+      });
+      return;
+    }
 
-    // *Некрасивенько, что в одном if проводятся сразу все проверки username
-    // потому что сложно сформировать адекватное сообщение об ошибке
-    if (typeof username !== "string" || username.length < 2 || username.length > 50) {
-      res.status(400).send({
+    const newUserResponse = await pgClient.query(`INSERT INTO users(
+      username
+    ) VALUES (
+      $1::text
+    )`, [username]);
+
+    if (newUserResponse.rowCount === 0) {
+      res.sendStatus(500);
+    }
+
+    const newUser = await getUserByName(username);
+
+    if (newUser === null) {
+      res.sendStatus(500);
+      return;
+    }
+
+    res.status(200).send({
+      "user_id": newUser.user_id,
+    });
+  });
+
+  server.get("/messages", async function (req: Request, res: Response) {
+    const messagesResponse = await pgClient.query(`SELECT
+      messages.message_id AS id,
+      users.username AS username,
+      messages.text AS text,
+      messages.created_at AS timestamp
+    FROM messages
+    LEFT JOIN users ON messages.user_id = users.user_id
+    ORDER BY messages.created_at ASC`);
+
+    res.status(200).send(messagesResponse.rows as Message[]);
+  });
+
+  server.post("/messages", async function (req: Request, res: Response) {
+    const { user_id, text } = req.body;
+    const user = await getUserById(user_id);
+
+    if (user === null) {
+      res.status(401).send({
         message: "Incorrect username",
       });
 
@@ -84,28 +129,34 @@ async function initServer() {
       return;
     }
 
-    const newMessage = {
-      id: idIterator.next().value as number,
-      text,
-      timestamp: new Date().toISOString(),
-      username,
-    };
+    let newMessageResponse;
 
-    messages.push(newMessage);
-    // INSERT INTO messages (user_id, text) VALUES (1, "Привет");
-    res.status(201).send(newMessage);
+    try {
+      newMessageResponse = await pgClient.query(`INSERT INTO messages(
+        text,
+        user_id
+      ) VALUES ($1::text, $2::integer)`, [text, user_id]);
+
+      res.sendStatus(201);
+    } catch (err) {
+      console.error(err);
+      console.dir(newMessageResponse, {
+        depth: 10
+      });
+
+      res.sendStatus(500);
+    }
   });
 
-  await client.connect();
-  const res = await client.query('SELECT $1::text as message', ['Hello Friend'])
-  console.log(res.rows[0].message);
+  await pgClient.connect();
+
   server.listen(PORT, function () {
     console.log(`[server]: Server is running at http://localhost:${PORT}`);
   });
 }
 
 process.on("exit", async function () {
-  await client.end();
+  await pgClient.end();
 });
 
 initServer();
