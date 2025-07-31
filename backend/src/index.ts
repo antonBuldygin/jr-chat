@@ -97,7 +97,8 @@ async function initServer() {
   });
 
   await client.connect();
-
+  const res = await client.query('SELECT $1::text as message', ['Hello Friend'])
+  console.log(res.rows[0].message);
   server.listen(PORT, function () {
     console.log(`[server]: Server is running at http://localhost:${PORT}`);
   });
