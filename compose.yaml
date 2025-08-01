@@ -3,7 +3,7 @@ services:
   frontend:
     depends_on:
       - "backend"
-    image: my-frontend
+#    image: my-frontend
     build:
       context: ./frontend
     ports:
@@ -12,7 +12,7 @@ services:
       - ./frontend:/app
 
   backend:
-    image: my-backend
+#    image: my-backend
     build:
       context: ./backend
     ports:
@@ -33,4 +33,3 @@ services:
 volumes:
   shared:
   db-data:
-

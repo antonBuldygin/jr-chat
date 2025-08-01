@@ -77,7 +77,7 @@ async function initServer() {
     const newUserResponse = await pgClient.query(`INSERT INTO users(
       username
     ) VALUES (
-      ${1}::text
+      $1::text
     )`, [username]);
 
     if (newUserResponse.rowCount === 0) {
@@ -135,7 +135,7 @@ async function initServer() {
       newMessageResponse = await pgClient.query(`INSERT INTO messages(
         text,
         user_id
-      ) VALUES (${1}::text, $2::integer)`, [text, user_id]);
+      ) VALUES ($1, $2)`, [text, user_id]);
 
       res.sendStatus(201);
     } catch (err) {
