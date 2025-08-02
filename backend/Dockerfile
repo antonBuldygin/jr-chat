@@ -11,4 +11,4 @@ WORKDIR /app
 RUN npm i
 
 # Указываем команду для запуска приложения
-CMD ["npm", "start"]
+CMD ["npm", "run", "docker"]
