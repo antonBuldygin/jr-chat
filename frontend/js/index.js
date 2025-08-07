@@ -114,7 +114,7 @@
             evt.preventDefault();
             const formData = new FormData(evt.target);
             const messageData = {
-                username: formData.get("username"),
+                user_id: formData.get("username"),
                 text: formData.get("text"),
             };
             formTextField.disabled = true;

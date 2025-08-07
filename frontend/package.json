@@ -2,10 +2,10 @@
   "name": "frontend",
   "version": "0.0.1",
   "description": "",
-  "main": "chat.js",
+  "main": "./js/index.js",
   "scripts": {
     "build": "npx tsc",
-    "start": "npx http-server . -p 4001 -c-1"
+    "start": "npx http-server . -p 4002 -c-1"
   },
   "author": "",
   "license": "ISC",
