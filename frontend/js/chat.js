@@ -157,6 +157,7 @@ function initForm() {
         };
         formTextField.disabled = true;
         formSubmitButton.disabled = true;
+        formSubmitButton.textContent = "Сообщение отправляется...";
         // formTextField.value = "Сообщение отправляется...";
         fetch(
             "http://localhost:4000/messages",
@@ -220,13 +221,40 @@ function initUsernameForm() {
         const formElement = evt.target;
         const formData = new FormData(formElement);
         const enteredUsername = formData.get("username");
+
+        fetch("http://localhost:4000/users", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                                     "username": enteredUsername,
+                                 }),
+        })
+            .then(function(authResponse) {
+                if (authResponse.status !== 200) {
+                    //
+                }
+
+                return authResponse.json();
+            })
+            .then(function(authResponseData) {
+                localStorage.setItem(USERNAME_REC, authResponseData.user_id);
+
+                usernameContainer.close();
+                usernameForm.onsubmit = null;
+
+                initApp();
+            });
+
+
         localStorage.setItem(
             USERNAME_REC,
             enteredUsername
         );
-        usernameContainer.close();
-        usernameForm.onsubmit = null;
-        initApp();
+        // usernameContainer.close();
+        // usernameForm.onsubmit = null;
+        // initApp();
     };
     usernameContainer.showModal();
 }
@@ -239,6 +267,7 @@ function initUsernameForm() {
 function initApp() {
     username = localStorage.getItem(USERNAME_REC);
     if (username === null) {
+        initUsernameForm();
         window.location.href = 'entrance.html';
         // initUsernameForm();
     }
