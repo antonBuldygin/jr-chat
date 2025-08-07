@@ -170,7 +170,7 @@ function initForm() {
             }
         )
             .then(function (newMessageResponse) {
-                if (newMessageResponse.status == 400) {
+                if (newMessageResponse.status != 200) {
                     alert("Ошибка 400. Скорее всего имя короткое");
                     localStorage.removeItem(USERNAME_REC);
                     chatContainer.innerHTML = "";
@@ -233,7 +233,7 @@ function initUsernameForm() {
         })
             .then(function(authResponse) {
                 if (authResponse.status !== 200) {
-                    //
+                    alert("YTnnnnnnnn")
                 }
 
                 return authResponse.json();
