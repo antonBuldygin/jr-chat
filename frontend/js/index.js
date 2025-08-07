@@ -118,8 +118,8 @@
                 text: formData.get("text"),
             };
             formTextField.disabled = true;
-            formSubmitButton.disabled = true;
-            formSubmitButton.textContent = "Сообщение отправляется...";
+            // formSubmitButton.disabled = true;
+            // formSubmitButton.textContent = "Сообщение отправляется...";
             fetch(
                 "http://localhost:4000/messages",
                 {
@@ -136,8 +136,8 @@
                     }
                     formTextField.disabled = false;
                     formTextField.value = "";
-                    formSubmitButton.disabled = false;
-                    formSubmitButton.textContent = "Отправить";
+                    // formSubmitButton.disabled = false;
+                    // formSubmitButton.textContent = "Отправить";
                     getMessages(scrollToBottom);
                 });
         }

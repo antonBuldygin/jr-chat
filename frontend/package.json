@@ -4,7 +4,7 @@
   "description": "",
   "main": "./js/index.js",
   "scripts": {
-    "build": "npx tsc",
+    "build": "parcel build js/chat.js --out-dir dist",
     "start": "npx http-server . -p 4002 -c-1"
   },
   "author": "",
