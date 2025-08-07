@@ -148,16 +148,19 @@ function initForm() {
     const formSubmitButton = formContainer.querySelector("#submit_button");
     const usernameField = formContainer.querySelector("input[name=username]");
     usernameField.value = username;
+    alert(username);
     formContainer.onsubmit = function (evt) {
         evt.preventDefault();
+        alert(username);
         const formData = new FormData(evt.target);
         const messageData = {
-            username: formData.get("username"),
+            user_id: formData.get("username"),
             text: formData.get("text"),
         };
         formTextField.disabled = true;
         formSubmitButton.disabled = true;
         formSubmitButton.textContent = "Сообщение отправляется...";
+        console.log(messageData);
         // formTextField.value = "Сообщение отправляется...";
         fetch(
             "http://localhost:4000/messages",
